@@ -42,20 +42,49 @@ const Interests = () => {
     },
   })
 
+  // Load user's saved interests
+  useEffect(() => {
+    const fetchUserInterests = async () => {
+      try {
+        const response = await fetch('/api/interests');
+        if (response.ok) {
+          const data = await response.json();
+          setSelectedInterests(data.interests);
+          form.setValue('interests', data.interests);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user interests:', error);
+        toast.error("Failed to load your saved interests");
+      }
+    };
+
+    fetchUserInterests();
+  }, []);
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      toast("Interests saved successfully!", {
+      const response = await fetch('/api/interests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ interests: data.interests }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to save interests');
+      }
+
+      toast.success("Interests saved successfully!", {
         description: "We'll keep you notified about your selected interests.",
-      })
-      console.log({ data })
-      setHasChanges(false) // Reset changes flag after successful save
+      });
+      setHasChanges(false);
     } catch (error) {
-      console.error("Failed to save interests:", error)
-      toast.error("Failed to save interests!")
+      console.error("Failed to save interests:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to save interests!");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -115,21 +144,6 @@ const Interests = () => {
 
     return pages
   }
-
-  // Load saved interests from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('selectedInterests')
-    if (saved) {
-      const parsedInterests = JSON.parse(saved)
-      setSelectedInterests(parsedInterests)
-      form.setValue('interests', parsedInterests)
-    }
-  }, [])
-
-  // Save to localStorage whenever selections change
-  useEffect(() => {
-    localStorage.setItem('selectedInterests', JSON.stringify(selectedInterests))
-  }, [selectedInterests])
 
   if (isFetching) {
     return (
@@ -202,13 +216,20 @@ const Interests = () => {
                           </FormControl>
                           <div
                             className="flex-1 min-w-0 cursor-pointer"
-                            onClick={() => handleInterestChange(interest.id, !selectedInterests.includes(interest.id))}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleInterestChange(interest.id, !selectedInterests.includes(interest.id));
+                            }}
                           >
-                            <FormLabel className="font-medium text-gray-800 cursor-pointer block">
+                            <FormLabel
+                              className="font-medium text-gray-800 cursor-pointer block"
+                              onClick={(e) => e.preventDefault()}
+                            >
                               {interest.label}
                             </FormLabel>
                             {interest.description && (
-                              <p className="text-xs text-gray-500 line-clamp-1  transition-all">
+                              <p className="text-xs text-gray-500 line-clamp-1 transition-all">
                                 {interest.description}
                               </p>
                             )}
@@ -269,8 +290,8 @@ const Interests = () => {
                   <span
                     key={page}
                     className={`cursor-pointer px-2 py-1 rounded transition-colors ${currentPage === page
-                        ? "bg-black text-white font-medium"
-                        : "hover:bg-gray-100"
+                      ? "bg-black text-white font-medium"
+                      : "hover:bg-gray-100"
                       }`}
                     onClick={() => setCurrentPage(page)}
                   >

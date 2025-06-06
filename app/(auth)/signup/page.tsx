@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { getApiUrl } from '@/lib/api-url';
 
 const FormSchema = z.object({
     name: z.string().min(2, {
@@ -43,7 +44,7 @@ const SignUp = () => {
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
         setIsLoading(true)
         try {
-            const response = await fetch('/api/auth/signup', {
+            const response = await fetch(getApiUrl('/api/auth/signup'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

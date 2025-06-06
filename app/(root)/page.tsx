@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { getApiUrl } from '@/lib/api-url';
 
 const FormSchema = z.object({
   interests: z.array(z.string()), // Remove min validation
@@ -46,7 +47,7 @@ const Interests = () => {
   useEffect(() => {
     const fetchUserInterests = async () => {
       try {
-        const response = await fetch('/api/interests');
+        const response = await fetch(getApiUrl('/api/interests'));
         if (response.ok) {
           const data = await response.json();
           setSelectedInterests(data.interests);
@@ -64,7 +65,7 @@ const Interests = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/interests', {
+      const response = await fetch(getApiUrl('/api/interests'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ interests: data.interests }),
@@ -104,7 +105,7 @@ const Interests = () => {
     const fetchCategories = async () => {
       setIsFetching(true)
       try {
-        const response = await fetch('/api/categories')
+        const response = await fetch(getApiUrl('/api/categories'))
         const data = await response.json()
         setInterests(data.categories ?? [])
       } catch (error) {

@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongoose";
 import User from "@/database/user.model";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { getApiUrl } from '@/lib/api-url';
 
 export async function POST(request: Request) {
     try {
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
         });
 
         // Send OTP email
-        await fetch(`/api/send-email`, {
+        await fetch(getApiUrl('/api/send-email'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp })

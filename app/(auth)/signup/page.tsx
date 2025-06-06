@@ -7,6 +7,7 @@ import { z } from "zod"
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -28,6 +29,7 @@ const FormSchema = z.object({
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -41,11 +43,23 @@ const SignUp = () => {
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
         setIsLoading(true)
         try {
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            toast("Account created successfully!", {
-                description: "Please check your email for verification code.",
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             })
-            console.log({ data })
+
+            const result = await response.json()
+
+            if (response.ok && result.success) {
+                toast("Account created successfully!", {
+                    description: "Please check your email for verification code.",
+                })
+                // Redirect to OTP verification page
+                router.push(`/verify-otp/${encodeURIComponent(data.email)}`)
+            } else {
+                toast.error(result.error || "Something went wrong!")
+            }
         } catch (error) {
             console.error("Account creation failed:", error)
             toast.error("Something went wrong!")

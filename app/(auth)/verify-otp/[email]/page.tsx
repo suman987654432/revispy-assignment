@@ -7,6 +7,7 @@ import { z } from "zod"
 import { useState } from "react"
 import { AlertCircle } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -25,6 +26,7 @@ const VerifyOtp = () => {
     const { email: encodedURL } = useParams<{ email: string; }>()
 
     const email = decodeURIComponent(encodedURL)
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -36,16 +38,55 @@ const VerifyOtp = () => {
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
         setIsLoading(true)
         try {
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            toast("Email verified successfully!", {
-                description: "Welcome to ECOMMERCE!",
+            const response = await fetch('/api/auth/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    otp: data.code
+                })
             })
-            console.log({ data })
+
+            const result = await response.json()
+
+            if (response.ok && result.success) {
+                toast("Email verified successfully!", {
+                    description: "Welcome to ECOMMERCE!",
+                })
+                // Redirect to interests page
+                router.push('/')
+            } else {
+                toast.error(result.error || "Verification failed!")
+            }
         } catch (error) {
             console.error("Verification failed:", error)
             toast.error("Verification failed!")
         } finally {
             setIsLoading(false)
+        }
+    }
+
+    // Add resend OTP functionality
+    const handleResendOTP = async () => {
+        try {
+            const response = await fetch('/api/auth/resend-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            })
+
+            const result = await response.json()
+
+            if (response.ok && result.success) {
+                toast("OTP sent successfully!", {
+                    description: "Please check your email for new verification code.",
+                })
+            } else {
+                toast.error(result.error ?? "Failed to resend OTP!")
+            }
+        } catch (error) {
+            console.error("Failed to resend OTP:", error)
+            toast.error("Failed to resend OTP!")
         }
     }
 
@@ -133,6 +174,14 @@ const VerifyOtp = () => {
                         />
                         <Button type="submit" className="w-full bg-black hover:bg-gray-800" disabled={isLoading}>
                             {isLoading ? "VERIFYING..." : "VERIFY"}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full"
+                            onClick={handleResendOTP}
+                        >
+                            Resend OTP
                         </Button>
                     </form>
                 </Form>

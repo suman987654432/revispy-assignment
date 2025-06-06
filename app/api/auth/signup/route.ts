@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongoose";
 import User from "@/database/user.model";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
     try {
@@ -29,13 +30,17 @@ export async function POST(request: Request) {
             );
         }
 
+        // Hash the password
+        const saltRounds = 12;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         const otp = Math.floor(10000000 + Math.random() * 90000000).toString();
         const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
         await User.create({
             name,
             email,
-            password,
+            password: hashedPassword,
             otp,
             otpExpiresAt
         });

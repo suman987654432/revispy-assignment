@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongoose";
 import User from "@/database/user.model";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
     try {
@@ -19,7 +20,19 @@ export async function POST(request: Request) {
         }
 
         const user = await User.findOne({ email });
-        if (!user || user.password !== password) {
+        if (!user) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Invalid email or password"
+                },
+                { status: 401 }
+            );
+        }
+
+        // Compare hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
             return NextResponse.json(
                 {
                     success: false,

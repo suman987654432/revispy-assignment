@@ -366,7 +366,10 @@ This project is licensed under the MIT License.
 
 ---
 
-**Developed by**: [Your Name]  
-**Email**: [Your Email]  
-**Demo**: [Deployment URL]  
-**Repository**: [GitHub URL]
+## 🚀 Developed By
+
+**Name**: Shivam Patel  
+**Email**: [shivampatel0048@gmail.com](mailto:shivampatel0048@gmail.com)  
+**🔗 Demo**: [View Live App](https://revispy-frontend-assignment-snowy.vercel.app/signup)  
+**📂 Repository**: [GitHub Repository](https://github.com/shivampatel0048/revispy-frontend-assignment)
+

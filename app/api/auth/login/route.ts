@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         });
 
         // Send OTP email
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-email`, {
+        await fetch(`/api/send-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp })

@@ -1,377 +1,190 @@
-# E-commerce Category Interest Selection App
+🚀 E-commerce Category Interest Selection App
+A modern, full-stack e-commerce web application built with Next.js, TypeScript, and MongoDB, where users can register, verify email via OTP, and select their favorite categories from a beautifully paginated UI.
 
-A modern e-commerce web application built with Next.js, TypeScript, and MongoDB that allows users to register, login, and select their interested categories from a paginated list.
+📌 Overview
+This project offers a complete user authentication and category interest selection system with:
 
-## 🎯 Project Overview
+✅ Email verification
+✅ JWT-based authentication
+✅ Category pagination & persistence
+✅ Responsive UI and error handling
 
-This project is a complete authentication and category management system where users can:
+✨ Key Features
+🔐 Authentication System
+✅ User Signup with secure form and validation
 
-- Register with email verification via OTP
-- Login securely with JWT authentication
-- Browse through 100+ categories with pagination
-- Select and persist their interested categories
-- Access protected routes only when authenticated
+✅ OTP Verification via email using Brevo (Sendinblue)
 
-## ✨ Features
+✅ JWT-based Login with httpOnly cookies
 
-### Authentication System
+✅ Protected Routes (server-side validated)
 
-- **User Registration** - Secure signup with email verification
-- **OTP Verification** - Email-based OTP verification using Brevo
-- **User Login** - JWT-based authentication with secure cookies
-- **Protected Routes** - Server-side route protection
+🗂️ Category Management
+✅ 100+ Categories generated via Faker.js
 
-### Category Management
+✅ Pagination — 6 categories per page
 
-- **100+ Categories** - Generated using Faker.js for realistic data
-- **Pagination** - 6 categories per page for optimal UX
-- **Persistent Selection** - Categories persist across sessions
-- **Real-time Updates** - Instant feedback on category selection
+✅ Persistent selection — user’s choices stored in DB
 
-### User Experience
+✅ Real-time feedback on selection
 
-- **Responsive Design** - Mobile-first responsive interface
-- **Clean UI** - Modern design with Tailwind CSS and Radix UI
-- **Loading States** - Comprehensive loading and error handling
-- **Toast Notifications** - User feedback with Sonner
+💡 User Experience
+✅ Modern responsive UI with Tailwind & Radix UI
 
-## 🛠️ Tech Stack
+✅ Real-time validation with Zod
 
-### Frontend
+✅ Toast notifications with Sonner
 
-- **Framework**: Next.js 15.1.8 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Radix UI, Lucide React
-- **Forms**: React Hook Form with Zod validation
-- **Notifications**: Sonner
+✅ Graceful loading & error states
 
-### Backend
+⚙️ Tech Stack
+Layer	Tech
+Frontend	Next.js 15 (App Router), TypeScript, Tailwind CSS, Radix UI
+Forms & Validation	React Hook Form, Zod
+Backend	Next.js API Routes, JWT, bcryptjs
+Database	MongoDB (Mongoose)
+Email	Brevo (Sendinblue API)
+Others	Faker.js, Sonner, Lucide React
 
-- **API**: Next.js API Routes
-- **Authentication**: JWT with httpOnly cookies
-- **Database**: MongoDB with Mongoose
-- **Email Service**: Brevo (Sendinblue)
-- **Password Hashing**: bcryptjs
+🛠️ Getting Started
+✅ Prerequisites
+Node.js 18+
 
-### Data Generation
+MongoDB URI
 
-- **Faker.js** - For generating realistic category data
+Brevo API key
 
-## 🚀 Getting Started
+📁 Environment Variables
+Create a .env.local file:
 
-### Prerequisites
+env
+Copy
+Edit
+# MongoDB
+MONGODB_URI=your_mongodb_uri
 
-- Node.js 18+
-- MongoDB database
-- Brevo account for email service
-
-### Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```env
-# Database
-MONGODB_URI=your_mongodb_connection_string
-
-# API
-NEXT_PUBLIC_API_URL=http://localhost:3000
-
-# Email (Brevo / Email.js)
+# Brevo Email
 BREVO_API_KEY=your_brevo_api_key
-OWNER_EMAIL=your_sender_email@domain.com
-CONTACT_EMAIL=your_contact_email@domain.com
+OWNER_EMAIL=you@example.com
+CONTACT_EMAIL=you@example.com
 
-# JWT / Auth
-JWT_SECRET=your_jwt_secret_key
+# JWT
+JWT_SECRET=your_secret
 
-# Environment
-NODE_ENV=development  # or "production" during deployment
-```
+# App
+NODE_ENV=development
+NEXT_PUBLIC_API_URL=http://localhost:3000
+🚀 Installation & Running Locally
+bash
+Copy
+Edit
+# Clone
+git clone https://github.com/your-username/revispy-assignment.git
+cd revispy-assignment
 
-### Installation
-
-1. **Clone the repository**
-
-```bash
-git clone <repository-url>
-cd revispy-frontend-assignment
-```
-
-2. **Install dependencies**
-
-```bash
+# Install
 npm install
-```
 
-3. **Set up environment variables**
-
-```bash
-cp .env.example .env.local
-# Edit .env.local with your actual values
-```
-
-4. **Start the development server**
-
-```bash
+# Start server
 npm run dev
-```
+Then go to 👉 http://localhost:3000
 
-5. **Open your browser**
-
-```
-http://localhost:3000
-```
-
-## 📁 Project Structure
-
-```
+🧾 Folder Structure
+perl
+Copy
+Edit
 app/
-├── (auth)/               # Authentication routes group
-│   ├── login/           # Login page
-│   ├── signup/          # Signup page
-│   └── verify-otp/      # OTP verification
-│       └── [email]/     # Dynamic email route
-├── (root)/              # Protected routes group
-│   ├── layout.tsx       # Protected layout with auth check
-│   └── page.tsx         # Category interests selection page
-├── api/                 # API routes
-│   ├── auth/            # Authentication endpoints
-│   │   ├── login/
-│   │   ├── signup/
-│   │   └── verify/
-│   ├── categories/      # Category management
-│   ├── interests/       # User interests management
-│   ├── seed/           # Database seeding
-│   └── send-email/     # Email service endpoints
-├── globals.css         # Global styles
-└── layout.tsx          # Root application layout
-
+├── (auth)/             # Signup, login, OTP verify
+├── (root)/             # Protected routes (category selection)
+├── api/                # All backend APIs
+│   ├── auth/           # Signup/Login/Verify
+│   ├── categories/     # Get categories
+│   ├── interests/      # Get/Save interests
+│   ├── seed/           # Category seeding
+│   └── send-email/     # Email OTP
 components/
-├── layout/             # Layout components
-│   └── header.tsx      # Application header
-└── ui/                 # Reusable UI components (shadcn/ui)
-    ├── button.tsx
-    ├── card.tsx
-    ├── checkbox.tsx
-    ├── form.tsx
-    ├── input.tsx
-    └── input-otp.tsx
-
-database/               # MongoDB models
-├── category.model.ts   # Category schema
-├── user.model.ts       # User schema
-└── user-interests.model.ts # User interests schema
-
-lib/                    # Utility functions
-├── utils/
-│   └── server-cookies.ts # Server-side cookie management
-├── db.ts              # Database connection
-├── email-templates.ts  # Email templates
-├── jwt.ts             # JWT utilities
-├── mongoose.ts        # Mongoose configuration
-├── seed-categories.ts  # Category seeding logic
-└── utils.ts           # General utilities
-```
-
-## 🎨 Key Features Implementation
-
-### 1. User Authentication Flow
-
-```typescript
-// Server-side route protection
+├── layout/             # Layout components (Header, etc.)
+├── ui/                 # UI components (Button, Card, Checkbox, etc.)
+database/
+├── *.model.ts          # Mongoose models
+lib/
+├── jwt.ts              # JWT helpers
+├── mongoose.ts         # DB connection
+├── seed-categories.ts  # Category generation logic
+├── utils/              # Cookie, validation, etc.
+🧪 Example Code Snippets
+🔒 Server-side Route Protection
+ts
+Copy
+Edit
 const token = await getServerAuthToken();
-if (!token) {
-  redirect("/login");
-}
-```
-
-### 2. Category Pagination
-
-```typescript
-// 6 categories per page with advanced pagination
+if (!token) redirect("/login");
+✅ Category Pagination
+ts
+Copy
+Edit
 const ITEMS_PER_PAGE = 6;
 const totalPages = Math.ceil(interests.length / ITEMS_PER_PAGE);
-```
-
-### 3. Persistent Category Selection
-
-```typescript
-// Categories persist across sessions using database
-await UserInterests.findOneAndUpdate(
-  { userId },
-  { interests: categoryObjectIds },
-  { upsert: true, new: true }
-);
-```
-
-### 4. Email Verification System
-
-```typescript
-// OTP-based email verification using Brevo
+📧 OTP Email via Brevo
+ts
+Copy
+Edit
 const otp = Math.floor(10000000 + Math.random() * 90000000).toString();
 await sendOtpEmail(email, otp);
-```
+🧬 Database Models
+🧍‍♂️ User
+ts
+Copy
+Edit
+{
+  name: string;
+  email: string;
+  password: string;
+  otp?: string;
+  otpExpiresAt?: Date;
+}
+📁 Category
+ts
+Copy
+Edit
+{
+  name: string;
+  description?: string;
+}
+⭐ UserInterests
+ts
+Copy
+Edit
+{
+  userId: ObjectId;
+  interests: ObjectId[];
+}
+🔐 Security Features
+JWT-based auth (httpOnly cookies)
 
-## 🎨 Design Implementation
+bcryptjs for password hashing
 
-The application follows the provided Figma design with:
+Zod validation for input security
 
-- **Clean, modern interface** using Tailwind CSS
-- **Consistent spacing and typography**
-- **Interactive elements** with hover states
-- **Responsive design** for all screen sizes
-- **Loading states** and error handling
+SSR protected routes
 
-## 🔒 Security Features
+Sanitized user inputs
 
-- **JWT Authentication** with httpOnly cookies
-- **Password Hashing** using bcryptjs
-- **Server-side Route Protection**
-- **Input Validation** with Zod schemas
-- **XSS Protection** through proper data sanitization
-
-## 📱 User Experience
-
-### Registration Flow
-
-1. User enters email, name, and password
-2. System sends OTP via email
-3. User verifies OTP
-4. Account is activated and user is logged in
-
-### Category Selection
-
-1. User browses paginated categories (6 per page)
-2. Selects interested categories with checkboxes
-3. Selections are saved and persist across sessions
-4. Visual feedback shows selected count
-
-## 🚀 Deployment
-
-### Environment Setup
-
-```bash
-# Build the application
+🌐 Deployment Guide
+Build & Serve
+bash
+Copy
+Edit
 npm run build
-
-# Start production server
 npm start
-```
+Auto-Seed Categories
+On first run, database seeds 100+ categories via Faker.js.
 
-### Database Setup
-
-The application automatically seeds the database with 100 categories using Faker.js on first run.
-
-## 📊 Database Schema
-
-### User Model
-
-```typescript
-{
-  name: string
-  email: string (unique)
-  password: string (hashed)
-  otp?: string
-  otpExpiresAt?: Date
-}
-```
-
-### Category Model
-
-```typescript
-{
-  id: string (unique)
-  name: string
-  description?: string
-}
-```
-
-### UserInterests Model
-
-```typescript
-{
-  userId: ObjectId (ref: User)
-  interests: ObjectId[] (ref: Category)
-}
-```
-
-## 🧪 Testing
-
-The application includes:
-
-- **Form validation** with real-time feedback
-- **Error handling** for API failures
-- **Loading states** for better UX
-- **Responsive design** testing
-
-## 🔧 Available Scripts
-
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-```
-
-## 📝 API Endpoints
-
-### Authentication
-
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/verify` - OTP verification
-
-### Categories & Interests
-
-- `GET /api/categories` - Fetch all categories
-- `GET /api/interests` - Get user interests
-- `POST /api/interests` - Save user interests
-- `POST /api/seed` - Seed database with categories
-
-### Utilities
-
-- `POST /api/send-email` - Send OTP emails
-
-## 🎯 Bonus Features Implemented
-
-- **Advanced Pagination** with page numbers and navigation
-- **Real-time Validation** with Zod schemas
-- **Toast Notifications** for user feedback
-- **Responsive Design** for all devices
-- **Loading States** throughout the application
-- **Error Handling** with graceful fallbacks
-- **TypeScript** for type safety
-- **Server-side Authentication** for security
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) for the amazing framework
-- [Tailwind CSS](https://tailwindcss.com/) for utility-first CSS
-- [Radix UI](https://www.radix-ui.com/) for accessible components
-- [Faker.js](https://fakerjs.dev/) for generating test data
-- [Brevo](https://www.brevo.com/) for email service
-
----
-
-## 🚀 Developed By
-
-**Name**: Shivam Patel  
-**Email**: [shivampatel0048@gmail.com](mailto:shivampatel0048@gmail.com)  
-**🔗 Demo**: [View Live App](https://revispy-frontend-assignment-snowy.vercel.app/signup)  
-**📂 Repository**: [GitHub Repository](https://github.com/shivampatel0048/revispy-frontend-assignment)
-
-#   r e v i s p y - a s s i g n m e n t  
- 
+🛠 Available Scripts
+bash
+Copy
+Edit
+npm run dev       # Dev mode
+npm run build     # Build for production
+npm run start     # Start production server
+npm run lint      # Lint the code

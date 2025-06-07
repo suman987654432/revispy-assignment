@@ -1,82 +1,283 @@
 🛒 E-commerce Category Interest Selection App
-A modern and fully responsive web application built with Next.js, TypeScript, and MongoDB, allowing users to register, verify their email via OTP, and select their interested categories from a dynamic, paginated list of 100+ categories.
+An interactive, modern e-commerce web app built using Next.js, TypeScript, and MongoDB, allowing users to register, verify via OTP, and explore + select categories of interest from a smartly paginated list.
 
-🚀 Live Demo
-👉 Click here to explore the app
+🎯 What This Project Does
+This application provides a seamless flow where users can:
 
-📂 GitHub Repository
-🔗 https://github.com/suman987654432/revispy-assignment
+Create an account with secure OTP-based verification
 
-✨ Key Features
-✅ Secure Registration with Email OTP Verification
+Sign in using JWT authentication
 
-✅ JWT-based Login Authentication with httpOnly Cookies
+Browse a variety of product categories
 
-✅ 100+ Categories Displayed with Smooth Pagination
+Choose their preferences with selections saved across sessions
 
-✅ Persistent Category Selection Stored in MongoDB
+Access protected pages securely after login
 
-✅ Protected Routes for Logged-In Users Only
+✨ Core Highlights
+🔐 Secure User Access
+Signup with Email – New users can register easily
 
-✅ Responsive UI with Tailwind CSS and Radix UI
+OTP Verification – Email verification using 8-digit OTP via Brevo
 
-✅ Interactive Toast Notifications via Sonner
+JWT Login – Tokens stored in httpOnly cookies for added security
 
-✅ Clean Form Validation using React Hook Form + Zod
+Protected Routes – Unauthorized users are auto-redirected
 
-🛠 Tech Stack
-Frontend: Next.js 15 (App Router), TypeScript
+🗂️ Category System
+100+ Fake Categories – Generated using Faker.js
 
-Styling: Tailwind CSS, Radix UI, Lucide React Icons
+Smart Pagination – 6 categories per page
 
-Backend: Next.js API Routes, JWT, bcryptjs, MongoDB (via Mongoose)
+Persisted Selection – Saves choices to the database
 
-Email Service: Brevo (formerly Sendinblue)
+Live Feedback – Real-time updates on selection
 
-Form & Validation: React Hook Form + Zod
+💻 UI/UX Features
+Fully Responsive – Works beautifully on all screen sizes
 
-Toast Notifications: Sonner
+Modern Aesthetics – Tailwind + Radix for polished design
 
-Data Seeding: Faker.js (for 100+ categories)
+Helpful Feedback – Toast notifications with Sonner
 
-📦 Setup Instructions
-Clone the Repository
+Graceful States – Custom loaders and error messages
 
+🛠️ Technology Stack
+Frontend
+Framework: Next.js (App Router)
+
+Language: TypeScript
+
+Styling: Tailwind CSS
+
+Components: Radix UI, Lucide Icons
+
+Forms: React Hook Form + Zod
+
+Notifications: Sonner
+
+Backend
+API Layer: Next.js API routes
+
+Auth: JWT + Secure Cookies
+
+Database: MongoDB via Mongoose
+
+Email Service: Brevo
+
+Encryption: bcryptjs
+
+🚀 Quick Start Guide
+Prerequisites
+Node.js 18+
+
+MongoDB Instance
+
+Brevo API Key
+
+Setup Instructions
+Clone this repo
 git clone https://github.com/suman987654432/revispy-assignment
 
-Install Dependencies
-
+Install packages
 npm install
 
-Set Up Environment Variables
-Create a .env.local file in the root and add:
+Add environment config
+Create .env.local and include:
 
 ini
 Copy
 Edit
-MONGODB_URI=your_mongodb_uri
-BREVO_API_KEY=your_brevo_key
-OWNER_EMAIL=your_email@example.com
-CONTACT_EMAIL=support@example.com
-JWT_SECRET=your_jwt_secret
+MONGODB_URI=your_mongodb_url
+JWT_SECRET=your_secret
+BREVO_API_KEY=your_brevo_api
+OWNER_EMAIL=your_email
 NEXT_PUBLIC_API_URL=http://localhost:3000
-Run the Development Server
-
+NODE_ENV=development
+Start the dev server
 npm run dev
+Visit: http://localhost:3000
 
-Open your browser at http://localhost:3000
+📁 Folder Breakdown
+rust
+Copy
+Edit
+app/
+├── (auth)/          -> login, signup, otp verify
+├── (root)/          -> dashboard for interests
+├── api/             -> authentication, interests, categories
+components/          -> layout, UI elements
+database/            -> mongoose models
+lib/                 -> db, email, jwt, utils
+🎨 How It Works
+Authentication Flow
 
-🧩 Project Highlights
-🔐 Email-based OTP authentication system
+Redirects unauthenticated users
 
-🧠 Smart category persistence across sessions
+Uses JWT for session management
 
-📱 Fully mobile-friendly and responsive
+Paginated Categories
 
-🧪 Validations and error handling built-in
+Displays 6 categories per page
 
-🎯 Great user feedback with loading states and toasts
+Allows forward/backward navigation
 
-👤 Developed By
+Saved Preferences
+
+Updates saved categories in real-time
+
+Retrieves on every user session
+
+OTP System
+
+Sends 8-digit OTP via Brevo
+
+Expires after limited time
+
+🔒 Security Measures
+JWT tokens stored in httpOnly cookies
+
+Passwords hashed using bcryptjs
+
+Input validation with Zod
+
+SSR-based protected pages
+
+Email OTP prevents bot signups
+
+👥 User Journey
+Signup Flow
+Fill name, email, password
+
+Receive OTP on mail
+
+Verify OTP to login
+
+Interest Selection
+Navigate through categories
+
+Choose interests via checkbox
+
+Data saved in MongoDB
+
+Feedback shown via toast alerts
+
+🚀 Deployment Steps
+Build and Run
+arduino
+Copy
+Edit
+npm run build
+npm start
+Auto Seed Categories
+100 fake categories are auto-inserted on first run
+
+🧱 MongoDB Models
+User
+
+ts
+Copy
+Edit
+{
+  name: string,
+  email: string,
+  password: string,
+  otp?: string,
+  otpExpiresAt?: Date
+}
+Category
+
+ts
+Copy
+Edit
+{
+  name: string,
+  description?: string
+}
+UserInterests
+
+ts
+Copy
+Edit
+{
+  userId: ObjectId,
+  interests: ObjectId[]
+}
+🧪 Testing & Quality
+Form validation using Zod
+
+Loading and error states handled
+
+Mobile + desktop responsiveness
+
+Fallbacks for API failures
+
+🔧 Useful Commands
+npm run dev – Launch dev server
+
+npm run build – Generate build
+
+npm run start – Start production
+
+npm run lint – Run linting
+
+📝 Key API Routes
+Authentication
+POST /api/auth/signup
+
+POST /api/auth/login
+
+POST /api/auth/verify
+
+Categories
+GET /api/categories
+
+POST /api/seed
+
+Interests
+GET /api/interests
+
+POST /api/interests
+
+🌟 Extra Features
+Clean pagination UI
+
+Live Zod validations
+
+Fully responsive layouts
+
+Type-safe coding via TypeScript
+
+Smooth SSR-based route protection
+
+Brevo-powered transactional emails
+
+🤝 Contribution Guide
+Fork this repository
+
+Create a new branch
+
+Add your feature or fix
+
+Push and open a PR
+
+📃 License
+Licensed under the MIT License
+
+🙌 Tools & Thanks
+Next.js – Full-stack React framework
+
+Tailwind CSS – Fast styling
+
+Radix UI – Headless component library
+
+Brevo – Email provider
+
+Faker.js – Fake category data
+
+👨‍💻 Developed by
 Suman Kumar
 📧 Email: suman987654432@gmail.com
+🔗 Live App: revispy-assignment-blue.vercel.app/login
+📂 GitHub Repo: github.com/suman987654432/revispy-assignment
+

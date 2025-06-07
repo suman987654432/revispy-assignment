@@ -6,6 +6,18 @@ import { getApiUrl } from '@/lib/api-url';
 
 export async function POST(request: Request) {
     try {
+        // Check for MongoDB URL before attempting connection
+        if (!process.env.MONGODB_URL) {
+            console.error("Missing MONGODB_URL environment variable");
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Server configuration error"
+                },
+                { status: 500 }
+            );
+        }
+        
         await connectToDatabase();
 
         const { email, name, password } = await request.json();
